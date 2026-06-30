@@ -1,0 +1,33 @@
+{
+  "name": "Daily Attendance Sheet — Security",
+  "short_name": "Asistencia",
+  "description": "Hoja de asistencia diaria del Departamento de Seguridad.",
+  "lang": "es",
+  "dir": "auto",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#eef0f5",
+  "theme_color": "#1a3a6b",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
