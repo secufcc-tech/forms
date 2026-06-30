@@ -182,11 +182,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, 
   .form-body { padding: 18px 14px; }
   .form-footer { flex-direction: column; align-items: flex-start; }
 
-  /* ── Sec 2: Supervisor — ID + Bravo on row 1, Full Name on row 2 ── */
-  #sup-grid { grid-template-columns: 3fr 1fr !important; }
+  /* ── Sec 2: Supervisor — ID + Full Name juntos en fila 1, Bravo en fila 2 ── */
+  #sup-grid { grid-template-columns: 1fr 1fr !important; }
   #sup-grid .field:nth-child(1) { order: 1; }
-  #sup-grid .field:nth-child(3) { order: 2; }
-  #sup-grid .field:nth-child(2) { order: 3; grid-column: 1 / -1; }
+  #sup-grid .field:nth-child(2) { order: 2; }
+  #sup-grid .field:nth-child(3) { order: 3; grid-column: 1 / -1; }
 
   /* ── Sec 3: Guards — single column, mobile layout ── */
   .guards-grid { grid-template-columns: 1fr !important; }
@@ -205,9 +205,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, 
   /* Show the mobile late slot when Late is active (JS sets badge/time visible) */
   .guard-mob-late { display: flex !important; }
 
-  /* ── Sec 4: Patrol — Plate + Bravo + Driver ID on row 1, Full Name below ── */
-  .grid-patrol { grid-template-columns: 15fr 10fr 20fr !important; }
-  .grid-patrol .field:nth-child(4) { grid-column: 1 / -1; }
+  /* ── Sec 4: Patrol — Plate + Bravo en fila 1; Driver ID + Full Name juntos en fila 2 ── */
+  .grid-patrol { grid-template-columns: 1fr 1fr !important; }
+  .grid-patrol .field:nth-child(1) { order: 1; }
+  .grid-patrol .field:nth-child(2) { order: 2; }
+  .grid-patrol .field:nth-child(3) { order: 3; }
+  .grid-patrol .field:nth-child(4) { order: 4; }
 }
 
 /* ── DATABASE / PADLOCK ────────────────────────────────────────────────────── */
@@ -624,7 +627,7 @@ function makeGuard(gn, num){
   idRow.style.cssText = 'display:flex;align-items:center;gap:6px;';
   var i1 = document.createElement('input'); i1.type = 'text'; i1.id = 'gid-' + gn + '-' + num; i1.placeholder = tr('ph_guardId');
   i1.style.flex = '1';
-  DBExc.registerId(i1, 'guard');
+  // (autocompletado ahora vía DBPick, configurado más abajo junto al campo Nombre)
   // Mobile late slot (shows badge+time inline after ID; hidden on desktop via CSS)
   var mobLateSlot = document.createElement('div');
   mobLateSlot.className = 'guard-mob-late';
@@ -656,8 +659,8 @@ function makeGuard(gn, num){
   var f2 = document.createElement('div'); f2.className = 'field';
   var l2 = document.createElement('label'); l2.className = 'g-namelbl'; l2.textContent = tr('lbl_guardName');
   var i2 = document.createElement('input'); i2.type = 'text'; i2.id = 'gnm-' + gn + '-' + num; i2.placeholder = tr('ph_guardName');
-  DBExc.registerName(i2, 'guard');
   DBattach(i1, i2, 'guard');
+  DBPick.register(i1, i2, 'guard');
   f2.appendChild(l2); f2.appendChild(i2);
   grid.appendChild(f1); grid.appendChild(f2); gb.appendChild(grid);
 
@@ -752,13 +755,12 @@ function makePatrolContent(n, plate){
   var fpdi=document.createElement('div'); fpdi.className='field';
   var lpdi=document.createElement('label'); lpdi.className='p-didlbl'; lpdi.textContent=tr('lbl_driverId');
   var ipdi=document.createElement('input'); ipdi.type='text'; ipdi.id='pdi-'+n; ipdi.placeholder=tr('ph_driverId');
-  DBExc.registerId(ipdi, 'guard');
   fpdi.appendChild(lpdi); fpdi.appendChild(ipdi); grid.appendChild(fpdi);
   var fpdn=document.createElement('div'); fpdn.className='field';
   var lpdn=document.createElement('label'); lpdn.className='p-dnamelbl'; lpdn.textContent=tr('lbl_driverName');
   var ipdn=document.createElement('input'); ipdn.type='text'; ipdn.id='pdn-'+n; ipdn.placeholder=tr('ph_driverName');
-  DBExc.registerName(ipdn, 'guard');
   DBattach(ipdi, ipdn, 'guard');
+  DBPick.register(ipdi, ipdn, 'guard');
   fpdn.appendChild(lpdn); fpdn.appendChild(ipdn); grid.appendChild(fpdn);
   frag.appendChild(grid);
   return frag;
@@ -1600,7 +1602,116 @@ var DBExc = (function(){
   return { refreshNames:refreshNames, refreshIds:refreshIds, refreshBravos:refreshBravos,
            registerName:registerName, registerId:registerId, initBravo:initBravo, makeBravo:makeBravo };
 })();
-function DBExcRefresh(){ try{ DBExc.refreshNames(); DBExc.refreshIds(); DBExc.refreshBravos(); }catch(e){} }
+function DBExcRefresh(){ try{ DBExc.refreshBravos(); }catch(e){} }
+
+/* ── DBPick: dropdown buscador (funciona en móvil) que vincula ID <-> Nombre ──
+   Al enfocar/escribir en el campo ID o Nombre muestra una lista filtrable con
+   "Nombre — ID". Al elegir una opción rellena AMBOS campos. */
+var DBPick = (function(){
+  var panel=null, cur=null;
+  function norm(s){ return String(s==null?'':s).trim().toLowerCase(); }
+  function unlocked(){ try{ return DB.isUnlocked(); }catch(e){ return false; } }
+  function getRoster(kind){ try{ return DB.getRoster(kind)||[]; }catch(e){ return []; } }
+
+  function ensurePanel(){
+    if(panel) return panel;
+    panel=document.createElement('div');
+    panel.className='dbpick-panel';
+    panel.style.cssText='position:absolute;z-index:10000;display:none;max-height:230px;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#fff;border:1px solid #c3cbe0;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.18);';
+    document.body.appendChild(panel);
+    return panel;
+  }
+  function position(){
+    if(!cur||!panel) return;
+    var r=cur.anchor.getBoundingClientRect();
+    var w=Math.max(r.width,200), maxw=window.innerWidth-12;
+    if(w>maxw) w=maxw;
+    var left=r.left+window.scrollX;
+    if(left+w>window.scrollX+window.innerWidth-6) left=window.scrollX+window.innerWidth-6-w;
+    if(left<window.scrollX+6) left=window.scrollX+6;
+    var ph=Math.min(panel.scrollHeight||0,230);
+    var below=window.innerHeight-r.bottom;
+    var top;
+    if(below < ph+12 && r.top > ph+12){ top=r.top+window.scrollY-ph-2; }
+    else { top=r.bottom+window.scrollY+2; }
+    panel.style.left=left+'px'; panel.style.top=top+'px'; panel.style.width=w+'px';
+  }
+  function takenSet(sel, except, fn){
+    var t={};
+    [].slice.call(document.querySelectorAll(sel)).forEach(function(f){ if(f===except) return; var v=fn(f); if(v) t[v]=true; });
+    return t;
+  }
+  function render(q){
+    if(!cur) return;
+    var p=ensurePanel(); p.innerHTML='';
+    if(!unlocked()){ hide(); return; }
+    var roster=getRoster(cur.kind), qq=norm(q);
+    var tIds=takenSet('.db-id', cur.idEl, function(f){ return String(f.value||'').trim(); });
+    var tNames=takenSet('.db-name', cur.nameEl, function(f){ return norm(f.value); });
+    var shown=0;
+    for(var i=0;i<roster.length && shown<60;i++){
+      var r=roster[i];
+      var rn=norm(r.name||''), rid=String(r.id==null?'':r.id).trim();
+      if(rid && tIds[rid]) continue;
+      if(rn && tNames[rn]) continue;
+      if(qq && rn.indexOf(qq)<0 && rid.toLowerCase().indexOf(qq)<0) continue;
+      (function(rec){
+        var row=document.createElement('div');
+        row.style.cssText='padding:10px 12px;cursor:pointer;border-bottom:1px solid #eef0f5;font-size:13px;display:flex;justify-content:space-between;gap:12px;align-items:center;';
+        var nm=document.createElement('span'); nm.textContent=rec.name||'—';
+        nm.style.cssText='font-weight:600;color:#1a2a4a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
+        var idd=document.createElement('span'); idd.textContent=String(rec.id==null?'':rec.id);
+        idd.style.cssText='color:#6b7693;font-size:12px;flex-shrink:0;';
+        row.appendChild(nm); row.appendChild(idd);
+        row.addEventListener('mouseenter',function(){ row.style.background='#eef3ff'; });
+        row.addEventListener('mouseleave',function(){ row.style.background='#fff'; });
+        row.addEventListener('click', function(){ pick(rec); });
+        p.appendChild(row); shown++;
+      })(r);
+    }
+    if(shown===0){
+      var em=document.createElement('div');
+      em.style.cssText='padding:11px 12px;color:#8a94aa;font-size:12px;';
+      em.textContent=qq?'Sin resultados':'—';
+      p.appendChild(em);
+    }
+    p.style.display='block'; position();
+  }
+  function pick(rec){
+    if(!cur) return;
+    if(rec.id!=null) cur.idEl.value=String(rec.id);
+    if(rec.name!=null) cur.nameEl.value=rec.name;
+    hide();
+    if(typeof DBExcRefresh==='function') DBExcRefresh();
+  }
+  function open(idEl,nameEl,kind,anchor,q){ if(!unlocked()){ hide(); return; } cur={idEl:idEl,nameEl:nameEl,kind:kind,anchor:anchor}; ensurePanel(); render(q); }
+  function hide(){ if(panel) panel.style.display='none'; cur=null; }
+
+  function register(idEl,nameEl,kind){
+    if(!idEl||!nameEl) return;
+    idEl.classList.add('db-id'); idEl.setAttribute('data-dbkind',kind); idEl.setAttribute('autocomplete','off');
+    nameEl.classList.add('db-name'); nameEl.setAttribute('data-dbkind',kind); nameEl.setAttribute('autocomplete','off');
+    function bind(el){
+      el.addEventListener('focus', function(){ open(idEl,nameEl,kind,el, el.value); });
+      el.addEventListener('input', function(){ open(idEl,nameEl,kind,el, el.value); });
+    }
+    bind(idEl); bind(nameEl);
+  }
+
+  // Cerrar al tocar fuera (mantiene abierto al desplazar dentro del panel)
+  document.addEventListener('pointerdown', function(e){
+    if(!cur) return;
+    var t=e.target;
+    if(panel && panel.contains(t)) return;
+    if(t===cur.idEl || t===cur.nameEl) return;
+    hide();
+  }, true);
+  document.addEventListener('scroll', function(){ if(cur) position(); }, true);
+  window.addEventListener('resize', function(){ if(cur) position(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') hide(); });
+
+  return { register:register, hide:hide };
+})();
 
 // ── DATABASE ADMIN UI ────────────────────────────────────────────────────────
 var DBT = {
@@ -1754,10 +1865,9 @@ addGate();
 setLang('en');
 resizeCvs();
 // DB init
-DBExc.registerName(document.getElementById('sup-name'), 'sup');
-DBExc.registerId(document.getElementById('sup-id'), 'sup');
 DBExc.initBravo(document.getElementById('sup-bravo'));
 DBattach(document.getElementById('sup-id'), document.getElementById('sup-name'), 'sup');
+DBPick.register(document.getElementById('sup-id'), document.getElementById('sup-name'), 'sup');
 document.getElementById('db-lock-btn').addEventListener('click', dbOpen);
 DB.restoreFromCache();   // remembered DB on this device (same file) — no password needed
 DB.populateDatalists();
@@ -1768,14 +1878,11 @@ dbRefreshStatus();
 <!-- ===== Registro del Service Worker + almacenamiento persistente ===== -->
 <script>
 window.addEventListener('load', function () {
-  // 1) Service worker: permite abrir la app sin conexión.
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(function (e) {
       console.warn('Service worker no registrado:', e);
     });
   }
-  // 2) Almacenamiento persistente: pide al móvil que NO borre la app de la
-  //    memoria aunque necesite espacio (clave para que persista tras borrar GitHub).
   if (navigator.storage && navigator.storage.persist) {
     navigator.storage.persisted().then(function (already) {
       if (!already) { return navigator.storage.persist(); }
