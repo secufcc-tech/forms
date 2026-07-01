@@ -331,12 +331,27 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, 
       </div>
     </div>
     <div class="section">
-      <div class="section-title"><span class="num">6</span>&nbsp;<span id="st6">Supervisor Signature</span></div>
-      <div class="sig-wrap">
-        <div class="sig-ph" id="sig-ph">Sign here with mouse or finger</div>
-        <canvas id="sig-canvas"></canvas>
-        <div class="sig-footer">
-          <button class="btn-clear-sig" id="btn-clear-sig" onclick="clearSig()">Clear Signature</button>
+      <div class="section-title"><span class="num">6</span>&nbsp;<span id="st6">Performed by:</span></div>
+      <div class="inner-box">
+        <div class="grid-3" id="madeby-grid">
+          <div class="field">
+            <label id="lbl-mbcat">Category <span class="req">*</span></label>
+            <select id="mb-category">
+              <option value="">— Select —</option>
+              <option value="Document Controller">Document Controller</option>
+              <option value="Secretary">Secretary</option>
+              <option value="Supervisor">Supervisor</option>
+              <option value="Guard">Guard</option>
+            </select>
+          </div>
+          <div class="field">
+            <label id="lbl-mbid">ID <span class="req">*</span></label>
+            <input type="text" id="mb-id" placeholder="ID" autocomplete="off">
+          </div>
+          <div class="field">
+            <label id="lbl-mbname">Full Name <span class="req">*</span></label>
+            <input type="text" id="mb-name" placeholder="Full name" autocomplete="off">
+          </div>
         </div>
       </div>
     </div>
@@ -409,7 +424,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, 
   </div>
 </div>
 <script>
-var T = {"en": {"formTitle": "Daily Attendance Sheet", "subtitle": "Uptown Stadium Construction JV — Security Department", "sec1": "General Information", "sec2": "Supervisor", "sec3": "Gate Assignment", "sec4": "Patrols", "sec5": "Observations", "sec6": "Supervisor Signature", "lbl_date": "Date", "lbl_shift": "Shift", "opt_day": "DAY", "opt_night": "NIGHT", "lbl_supId": "ID", "lbl_supName": "Full Name", "lbl_supBravo": "Bravo", "ph_supBravo": "Bravo #", "ph_supId": "Supervisor ID", "ph_supName": "Full name", "ph_supBravo": "Bravo #", "addGate": "Add Gate", "lbl_gate": "Gate", "selectGate": "— Select Gate —", "guard": "Guard", "lbl_guardId": "Guard ID", "lbl_guardName": "Full Name", "lbl_addComment": "Add Comment", "lbl_comment": "Comment", "ph_guardId": "Guard ID number", "ph_guardName": "Guard full name", "ph_comment": "Comment about this guard...", "addPatrol": "Add Patrol", "patrol": "Patrol", "lbl_plate": "Plate Number", "lbl_driverId": "Driver ID", "lbl_driverName": "Driver Full Name", "ph_plate": "e.g. AHR 1331", "ph_driverId": "Driver ID", "ph_driverName": "Full name", "lbl_obs": "General Observations / Notes", "ph_obs": "Enter any relevant observations, incidents, or notes for this shift...", "sigPh": "Sign here with mouse or finger", "clearSig": "Clear Signature", "btnClear": "Clear", "btnPrint": "Print / PDF", "btnRemove": "Remove", "footerDoc": "Daily Attendance Sheet", "stampLabel": "Saved:", "val_date": "Please select a date.", "val_shift": "Please select a shift (Day or Night).", "val_sup": "Supervisor ID and Name are required.", "toast_print": "Saved — sending to print...", "toast_clear": "Form cleared.", "min_patrol": "At least one patrol is required.", "min_gate": "At least one gate is required.", "confirm_clear": "Clear all fields? This cannot be undone.", "shift_day_icon": "☀ DAY", "shift_night_icon": "🌙 NIGHT", "lbl_late": "Late", "lbl_arrivalTime": "Arrival Time", "lbl_guardSig": "Signature", "lbl_patrolSig": "Sign", "btnSave": "💾 Save", "toast_saving": "💾 Generating saved file…", "toast_saved": "✔ File saved!"}, "es": {"formTitle": "Hoja de Asistencia Diaria", "subtitle": "Uptown Stadium Construction JV — Departamento de Seguridad", "sec1": "Información General", "sec2": "Supervisor", "sec3": "Asignación de Puertas", "sec4": "Patrullas", "sec5": "Observaciones", "sec6": "Firma del Supervisor", "lbl_date": "Fecha", "lbl_shift": "Turno", "opt_day": "DÍA", "opt_night": "NOCHE", "lbl_supId": "ID", "lbl_supName": "Nombre completo", "lbl_supBravo": "Bravo", "ph_supBravo": "Bravo #", "ph_supId": "ID del supervisor", "ph_supName": "Nombre completo", "ph_supBravo": "Bravo #", "addGate": "Agregar Puerta", "lbl_gate": "Puerta", "selectGate": "— Seleccionar Puerta —", "guard": "Guardia", "lbl_guardId": "ID del Guardia", "lbl_guardName": "Nombre completo", "lbl_addComment": "Agregar Comentario", "lbl_comment": "Comentario", "ph_guardId": "Número de ID del guardia", "ph_guardName": "Nombre completo del guardia", "ph_comment": "Comentario sobre este guardia...", "addPatrol": "Agregar Patrulla", "patrol": "Patrulla", "lbl_plate": "Matrícula", "lbl_driverId": "ID del Conductor", "lbl_driverName": "Nombre del Conductor", "ph_plate": "ej. AHR 1331", "ph_driverId": "ID del conductor", "ph_driverName": "Nombre completo", "lbl_obs": "Observaciones / Notas Generales", "ph_obs": "Ingrese cualquier observación, incidente o nota relevante del turno...", "sigPh": "Firmar aquí con ratón o dedo", "clearSig": "Borrar Firma", "btnClear": "Limpiar", "btnPrint": "Imprimir / PDF", "btnRemove": "Eliminar", "footerDoc": "Hoja de Asistencia Diaria", "stampLabel": "Guardado:", "val_date": "Por favor selecciona una fecha.", "val_shift": "Por favor selecciona el turno (Día o Noche).", "val_sup": "El ID y Nombre del supervisor son obligatorios.", "toast_print": "Guardado — enviando a imprimir...", "toast_clear": "Formulario limpiado.", "min_patrol": "Se requiere al menos una patrulla.", "min_gate": "Se requiere al menos una puerta.", "confirm_clear": "¿Limpiar todos los campos? Esta acción no se puede deshacer.", "shift_day_icon": "☀ DÍA", "shift_night_icon": "🌙 NOCHE", "lbl_late": "Llegó tarde", "lbl_arrivalTime": "Hora de llegada", "lbl_guardSig": "Firma", "lbl_patrolSig": "Firma", "btnSave": "💾 Guardar", "toast_saving": "💾 Generando archivo guardado…", "toast_saved": "✔ ¡Archivo guardado!"}, "ar": {"formTitle": "سجل الحضور اليومي", "subtitle": "مشروع بناء استاد أبتاون — قسم الأمن", "sec1": "المعلومات العامة", "sec2": "المشرف", "sec3": "تعيين البوابات", "sec4": "دوريات", "sec5": "ملاحظات", "sec6": "توقيع المشرف", "lbl_date": "التاريخ", "lbl_shift": "الوردية", "opt_day": "نهار", "opt_night": "ليل", "lbl_supId": "رقم الهوية", "lbl_supName": "الاسم الكامل", "lbl_supBravo": "برافو", "ph_supBravo": "Bravo #", "ph_supId": "رقم هوية المشرف", "ph_supName": "الاسم الكامل", "ph_supBravo": "رقم جهاز اللاسلكي", "addGate": "إضافة بوابة", "lbl_gate": "البوابة", "selectGate": "— اختر البوابة —", "guard": "حارس", "lbl_guardId": "رقم هوية الحارس", "lbl_guardName": "الاسم الكامل", "lbl_addComment": "إضافة تعليق", "lbl_comment": "تعليق", "ph_guardId": "رقم هوية الحارس", "ph_guardName": "الاسم الكامل للحارس", "ph_comment": "تعليق حول هذا الحارس...", "addPatrol": "إضافة دورية", "patrol": "دورية", "lbl_plate": "رقم اللوحة", "lbl_driverId": "رقم هوية السائق", "lbl_driverName": "اسم السائق", "ph_plate": "مثال: AHR 1331", "ph_driverId": "رقم هوية السائق", "ph_driverName": "الاسم الكامل", "lbl_obs": "الملاحظات العامة", "ph_obs": "أدخل أي ملاحظات ذات صلة بهذه الوردية...", "sigPh": "وقّع هنا بالماوس أو بالإصبع", "clearSig": "مسح التوقيع", "btnClear": "مسح", "btnPrint": "طباعة / PDF", "btnRemove": "إزالة", "footerDoc": "سجل الحضور اليومي", "stampLabel": "تم الحفظ:", "val_date": "يرجى تحديد التاريخ.", "val_shift": "يرجى تحديد الوردية.", "val_sup": "رقم هوية المشرف واسمه إلزاميان.", "toast_print": "تم الحفظ — جارٍ الإرسال للطباعة...", "toast_clear": "تم مسح النموذج.", "min_patrol": "مطلوبة دورية واحدة على الأقل.", "min_gate": "مطلوبة بوابة واحدة على الأقل.", "confirm_clear": "مسح جميع الحقول؟ لا يمكن التراجع.", "shift_day_icon": "☀ نهار", "shift_night_icon": "🌙 ليل", "lbl_late": "تأخر", "lbl_arrivalTime": "وقت الوصول", "lbl_guardSig": "توقيع", "lbl_patrolSig": "توقيع", "btnSave": "💾 حفظ", "toast_saving": "جارٍ إنشاء الملف…", "toast_saved": "✔ تم الحفظ!"}};
+var T = {"en": {"formTitle": "Daily Attendance Sheet", "subtitle": "Uptown Stadium Construction JV — Security Department", "sec1": "General Information", "sec2": "Supervisor", "sec3": "Gate Assignment", "sec4": "Patrols", "sec5": "Observations", "sec6": "Performed by:", "lbl_category": "Category", "mb_select": "— Select —", "cat_docctrl": "Document Controller", "cat_secretary": "Secretary", "cat_supervisor": "Supervisor", "cat_guard": "Guard", "val_madeby": "Category, ID and Name (Performed by) are required.", "lbl_date": "Date", "lbl_shift": "Shift", "opt_day": "DAY", "opt_night": "NIGHT", "lbl_supId": "ID", "lbl_supName": "Full Name", "lbl_supBravo": "Bravo", "ph_supBravo": "Bravo #", "ph_supId": "Supervisor ID", "ph_supName": "Full name", "ph_supBravo": "Bravo #", "addGate": "Add Gate", "lbl_gate": "Gate", "selectGate": "— Select Gate —", "guard": "Guard", "lbl_guardId": "Guard ID", "lbl_guardName": "Full Name", "lbl_addComment": "Add Comment", "lbl_comment": "Comment", "ph_guardId": "Guard ID number", "ph_guardName": "Guard full name", "ph_comment": "Comment about this guard...", "addPatrol": "Add Patrol", "patrol": "Patrol", "lbl_plate": "Plate Number", "lbl_driverId": "Driver ID", "lbl_driverName": "Driver Full Name", "ph_plate": "e.g. AHR 1331", "ph_driverId": "Driver ID", "ph_driverName": "Full name", "lbl_obs": "General Observations / Notes", "ph_obs": "Enter any relevant observations, incidents, or notes for this shift...", "sigPh": "Sign here with mouse or finger", "clearSig": "Clear Signature", "btnClear": "Clear", "btnPrint": "Print / PDF", "btnRemove": "Remove", "footerDoc": "Daily Attendance Sheet", "stampLabel": "Saved:", "val_date": "Please select a date.", "val_shift": "Please select a shift (Day or Night).", "val_sup": "Supervisor ID and Name are required.", "toast_print": "Saved — sending to print...", "toast_clear": "Form cleared.", "min_patrol": "At least one patrol is required.", "min_gate": "At least one gate is required.", "confirm_clear": "Clear all fields? This cannot be undone.", "shift_day_icon": "☀ DAY", "shift_night_icon": "🌙 NIGHT", "lbl_late": "Late", "lbl_arrivalTime": "Arrival Time", "lbl_guardSig": "Signature", "lbl_patrolSig": "Sign", "btnSave": "💾 Save", "toast_saving": "💾 Generating saved file…", "toast_saved": "✔ File saved!"}, "es": {"formTitle": "Hoja de Asistencia Diaria", "subtitle": "Uptown Stadium Construction JV — Departamento de Seguridad", "sec1": "Información General", "sec2": "Supervisor", "sec3": "Asignación de Puertas", "sec4": "Patrullas", "sec5": "Observaciones", "sec6": "Realizado por:", "lbl_category": "Categoría", "mb_select": "— Seleccionar —", "cat_docctrl": "Controlador de Documentos", "cat_secretary": "Secretaria", "cat_supervisor": "Supervisor", "cat_guard": "Guardia", "val_madeby": "La Categoría, el ID y el Nombre (Realizado por) son obligatorios.", "lbl_date": "Fecha", "lbl_shift": "Turno", "opt_day": "DÍA", "opt_night": "NOCHE", "lbl_supId": "ID", "lbl_supName": "Nombre completo", "lbl_supBravo": "Bravo", "ph_supBravo": "Bravo #", "ph_supId": "ID del supervisor", "ph_supName": "Nombre completo", "ph_supBravo": "Bravo #", "addGate": "Agregar Puerta", "lbl_gate": "Puerta", "selectGate": "— Seleccionar Puerta —", "guard": "Guardia", "lbl_guardId": "ID del Guardia", "lbl_guardName": "Nombre completo", "lbl_addComment": "Agregar Comentario", "lbl_comment": "Comentario", "ph_guardId": "Número de ID del guardia", "ph_guardName": "Nombre completo del guardia", "ph_comment": "Comentario sobre este guardia...", "addPatrol": "Agregar Patrulla", "patrol": "Patrulla", "lbl_plate": "Matrícula", "lbl_driverId": "ID del Conductor", "lbl_driverName": "Nombre del Conductor", "ph_plate": "ej. AHR 1331", "ph_driverId": "ID del conductor", "ph_driverName": "Nombre completo", "lbl_obs": "Observaciones / Notas Generales", "ph_obs": "Ingrese cualquier observación, incidente o nota relevante del turno...", "sigPh": "Firmar aquí con ratón o dedo", "clearSig": "Borrar Firma", "btnClear": "Limpiar", "btnPrint": "Imprimir / PDF", "btnRemove": "Eliminar", "footerDoc": "Hoja de Asistencia Diaria", "stampLabel": "Guardado:", "val_date": "Por favor selecciona una fecha.", "val_shift": "Por favor selecciona el turno (Día o Noche).", "val_sup": "El ID y Nombre del supervisor son obligatorios.", "toast_print": "Guardado — enviando a imprimir...", "toast_clear": "Formulario limpiado.", "min_patrol": "Se requiere al menos una patrulla.", "min_gate": "Se requiere al menos una puerta.", "confirm_clear": "¿Limpiar todos los campos? Esta acción no se puede deshacer.", "shift_day_icon": "☀ DÍA", "shift_night_icon": "🌙 NOCHE", "lbl_late": "Llegó tarde", "lbl_arrivalTime": "Hora de llegada", "lbl_guardSig": "Firma", "lbl_patrolSig": "Firma", "btnSave": "💾 Guardar", "toast_saving": "💾 Generando archivo guardado…", "toast_saved": "✔ ¡Archivo guardado!"}, "ar": {"formTitle": "سجل الحضور اليومي", "subtitle": "مشروع بناء استاد أبتاون — قسم الأمن", "sec1": "المعلومات العامة", "sec2": "المشرف", "sec3": "تعيين البوابات", "sec4": "دوريات", "sec5": "ملاحظات", "sec6": "أُنجز بواسطة:", "lbl_category": "الفئة", "mb_select": "— اختر —", "cat_docctrl": "مراقب الوثائق", "cat_secretary": "سكرتير", "cat_supervisor": "مشرف", "cat_guard": "حارس", "val_madeby": "الفئة ورقم الهوية والاسم (أُنجز بواسطة) إلزامية.", "lbl_date": "التاريخ", "lbl_shift": "الوردية", "opt_day": "نهار", "opt_night": "ليل", "lbl_supId": "رقم الهوية", "lbl_supName": "الاسم الكامل", "lbl_supBravo": "برافو", "ph_supBravo": "Bravo #", "ph_supId": "رقم هوية المشرف", "ph_supName": "الاسم الكامل", "ph_supBravo": "رقم جهاز اللاسلكي", "addGate": "إضافة بوابة", "lbl_gate": "البوابة", "selectGate": "— اختر البوابة —", "guard": "حارس", "lbl_guardId": "رقم هوية الحارس", "lbl_guardName": "الاسم الكامل", "lbl_addComment": "إضافة تعليق", "lbl_comment": "تعليق", "ph_guardId": "رقم هوية الحارس", "ph_guardName": "الاسم الكامل للحارس", "ph_comment": "تعليق حول هذا الحارس...", "addPatrol": "إضافة دورية", "patrol": "دورية", "lbl_plate": "رقم اللوحة", "lbl_driverId": "رقم هوية السائق", "lbl_driverName": "اسم السائق", "ph_plate": "مثال: AHR 1331", "ph_driverId": "رقم هوية السائق", "ph_driverName": "الاسم الكامل", "lbl_obs": "الملاحظات العامة", "ph_obs": "أدخل أي ملاحظات ذات صلة بهذه الوردية...", "sigPh": "وقّع هنا بالماوس أو بالإصبع", "clearSig": "مسح التوقيع", "btnClear": "مسح", "btnPrint": "طباعة / PDF", "btnRemove": "إزالة", "footerDoc": "سجل الحضور اليومي", "stampLabel": "تم الحفظ:", "val_date": "يرجى تحديد التاريخ.", "val_shift": "يرجى تحديد الوردية.", "val_sup": "رقم هوية المشرف واسمه إلزاميان.", "toast_print": "تم الحفظ — جارٍ الإرسال للطباعة...", "toast_clear": "تم مسح النموذج.", "min_patrol": "مطلوبة دورية واحدة على الأقل.", "min_gate": "مطلوبة بوابة واحدة على الأقل.", "confirm_clear": "مسح جميع الحقول؟ لا يمكن التراجع.", "shift_day_icon": "☀ نهار", "shift_night_icon": "🌙 ليل", "lbl_late": "تأخر", "lbl_arrivalTime": "وقت الوصول", "lbl_guardSig": "توقيع", "lbl_patrolSig": "توقيع", "btnSave": "💾 حفظ", "toast_saving": "جارٍ إنشاء الملف…", "toast_saved": "✔ تم الحفظ!"}};
 var LANG = 'en';
 
 function tr(k){ return (T[LANG] && T[LANG][k]) ? T[LANG][k] : (T.en[k] || k); }
@@ -432,7 +447,6 @@ function applyAllStatic(){
     'st1':'sec1','st2':'sec2','st3':'sec3','st4':'sec4','st5':'sec5','st6':'sec6',
     'st1':'sec1',
     'add-gate-lbl':'addGate','add-patrol-lbl':'addPatrol',
-    'sig-ph':'sigPh','btn-clear-sig':'clearSig',
     'btn-clear':'btnClear','btn-save-snap':'btnSave',
     'stamp-lbl':'stampLabel','footer-doc':'footerDoc',
     'lbl-obs':'lbl_obs'
@@ -448,14 +462,25 @@ function applyAllStatic(){
   setLblWithReq('lbl-supid','lbl_supId');
   setLblWithReq('lbl-supname','lbl_supName');
   document.getElementById('lbl-supbravo').textContent = tr('lbl_supBravo');
+  // Performed-by (section 6) labels
+  setLblWithReq('lbl-mbcat','lbl_category');
+  setLblWithReq('lbl-mbid','lbl_supId');
+  setLblWithReq('lbl-mbname','lbl_supName');
+  updateMbCategoryOptions();
   // Shift opts
   document.getElementById('opt-day').textContent = '☀ ' + tr('opt_day');
   document.getElementById('opt-night').textContent = '🌙 ' + tr('opt_night');
   // Placeholders
-  var phs = {'sup-id':'ph_supId','sup-name':'ph_supName','sup-bravo':'ph_supBravo','field-obs':'ph_obs'};
+  var phs = {'sup-id':'ph_supId','sup-name':'ph_supName','sup-bravo':'ph_supBravo','field-obs':'ph_obs','mb-id':'ph_supId','mb-name':'ph_supName'};
   Object.keys(phs).forEach(function(id){
     var el = document.getElementById(id); if(el) el.placeholder = tr(phs[id]);
   });
+}
+
+function updateMbCategoryOptions(){
+  var sel = document.getElementById('mb-category'); if(!sel) return;
+  var map = {'':'mb_select','Document Controller':'cat_docctrl','Secretary':'cat_secretary','Supervisor':'cat_supervisor','Guard':'cat_guard'};
+  Array.from(sel.options).forEach(function(o){ var k = map[o.value]; if(k) o.textContent = tr(k); });
 }
 
 function setLblWithReq(id, key){
@@ -739,9 +764,52 @@ function makePatrolContent(n, plate){
   var frag = document.createDocumentFragment();
   var hdr = document.createElement('div'); hdr.className = 'block-header';
   var lbl = document.createElement('span'); lbl.className = 'block-label patrol-num'; lbl.textContent = tr('patrol') + ' #' + n;
+
+  // Right side of header: late badge+time, toggles (Add Comment | Late), remove
+  var rightGrp = document.createElement('div');
+  rightGrp.style.cssText = 'display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end;';
+
+  // Late badge + time (hidden until Late checked)
+  var lateBadgeWrap = document.createElement('div');
+  lateBadgeWrap.id = 'plbwrap-' + n;
+  lateBadgeWrap.style.cssText = 'display:none;align-items:center;gap:5px;';
+  var badge = document.createElement('span'); badge.className = 'late-badge'; badge.id = 'plbadge-' + n;
+  badge.textContent = tr('lbl_late'); badge.style.display = 'none';
+  var ltfi = document.createElement('input'); ltfi.type = 'time'; ltfi.id = 'plarr-' + n;
+  ltfi.style.cssText = 'display:none;width:90px;font-size:9px;font-weight:800;padding:2px 7px;border:1px solid #e07000;border-radius:4px;color:#e07000;background:#fff3cd;text-transform:uppercase;text-align:center;';
+  lateBadgeWrap.appendChild(badge); lateBadgeWrap.appendChild(ltfi);
+  rightGrp.appendChild(lateBadgeWrap);
+
+  // Toggles: Add Comment | Late
+  var toggles = document.createElement('div'); toggles.className = 'guard-toggles';
+  var ctLbl = document.createElement('label'); ctLbl.className = 'cmt-toggle';
+  var ctCb = document.createElement('input'); ctCb.type = 'checkbox'; ctCb.id = 'pcc-' + n;
+  var ctTxt = document.createElement('span'); ctTxt.className = 'cmt-toggle-txt'; ctTxt.textContent = tr('lbl_addComment');
+  ctCb.addEventListener('change', function(){
+    var c = document.getElementById('pcmt-' + n);
+    if(c) c.classList.toggle('visible', ctCb.checked);
+  });
+  ctLbl.appendChild(ctCb); ctLbl.appendChild(ctTxt);
+  var ltLbl = document.createElement('label'); ltLbl.className = 'late-toggle';
+  var ltCb = document.createElement('input'); ltCb.type = 'checkbox'; ltCb.id = 'plc-' + n;
+  var ltTxt = document.createElement('span'); ltTxt.className = 'late-toggle-txt'; ltTxt.textContent = tr('lbl_late');
+  ltCb.addEventListener('change', function(){
+    var bd = document.getElementById('plbadge-' + n);
+    var ti = document.getElementById('plarr-' + n);
+    var bw = document.getElementById('plbwrap-' + n);
+    if(bd) bd.style.display = ltCb.checked ? 'inline' : 'none';
+    if(ti) ti.style.display = ltCb.checked ? 'inline-block' : 'none';
+    if(bw) bw.style.display = ltCb.checked ? 'flex' : 'none';
+  });
+  ltLbl.appendChild(ltCb); ltLbl.appendChild(ltTxt);
+  toggles.appendChild(ctLbl); toggles.appendChild(ltLbl);
+  rightGrp.appendChild(toggles);
+
   var rm = document.createElement('button'); rm.className = 'btn-remove'; rm.textContent = tr('btnRemove');
   rm.addEventListener('click', function(){ removePatrol(n); });
-  hdr.appendChild(lbl); hdr.appendChild(rm); frag.appendChild(hdr);
+  rightGrp.appendChild(rm);
+
+  hdr.appendChild(lbl); hdr.appendChild(rightGrp); frag.appendChild(hdr);
 
   var grid = document.createElement('div'); grid.className = 'grid-patrol';
   var fppl=document.createElement('div'); fppl.className='field';
@@ -763,6 +831,12 @@ function makePatrolContent(n, plate){
   DBPick.register(ipdi, ipdn, 'guard');
   fpdn.appendChild(lpdn); fpdn.appendChild(ipdn); grid.appendChild(fpdn);
   frag.appendChild(grid);
+
+  // Comment (hidden until Add Comment checked)
+  var cmt = document.createElement('div'); cmt.className = 'guard-comment field'; cmt.id = 'pcmt-' + n;
+  var cl = document.createElement('label'); cl.className = 'p-cmtlbl'; cl.textContent = tr('lbl_comment');
+  var ct = document.createElement('textarea'); ct.id = 'pct-' + n; ct.placeholder = tr('ph_comment');
+  cmt.appendChild(cl); cmt.appendChild(ct); frag.appendChild(cmt);
   return frag;
 }
 
@@ -776,6 +850,11 @@ function updatePatrolLang(block){
   block.querySelectorAll('[id^="ppl-"]').forEach(function(el){ el.placeholder = tr('ph_plate'); });
   block.querySelectorAll('[id^="pdi-"]').forEach(function(el){ el.placeholder = tr('ph_driverId'); });
   block.querySelectorAll('[id^="pdn-"]').forEach(function(el){ el.placeholder = tr('ph_driverName'); });
+  block.querySelectorAll('.cmt-toggle-txt').forEach(function(el){ el.textContent = tr('lbl_addComment'); });
+  block.querySelectorAll('.late-toggle-txt').forEach(function(el){ el.textContent = tr('lbl_late'); });
+  block.querySelectorAll('.late-badge').forEach(function(el){ el.textContent = tr('lbl_late'); });
+  block.querySelectorAll('.p-cmtlbl').forEach(function(el){ el.textContent = tr('lbl_comment'); });
+  block.querySelectorAll('[id^="pct-"]').forEach(function(el){ el.placeholder = tr('ph_comment'); });
   block.querySelectorAll('.p-siglbl').forEach(function(el){ el.textContent = tr('lbl_patrolSig'); });
   block.querySelectorAll('.patrol-sig-ph').forEach(function(el){ el.textContent = tr('lbl_patrolSig'); });
   block.querySelectorAll('.btn-remove').forEach(function(el){ el.textContent = tr('btnRemove'); });
@@ -787,27 +866,17 @@ function removePatrol(n){
   DBExcRefresh();
 }
 
-// SIGNATURE
-var cvs = document.getElementById('sig-canvas');
-var ctx = cvs.getContext('2d');
-var drawing = false;
-function resizeCvs(){ cvs.width = Math.floor(cvs.parentElement.getBoundingClientRect().width) || 800; cvs.height = 150; }
-window.addEventListener('resize', resizeCvs);
-function getPos(e){ var r = cvs.getBoundingClientRect(); if(e.touches) return {x:e.touches[0].clientX-r.left,y:e.touches[0].clientY-r.top}; return {x:e.clientX-r.left,y:e.clientY-r.top}; }
-cvs.addEventListener('mousedown',function(e){ drawing=true; var p=getPos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); document.getElementById('sig-ph').style.opacity='0'; });
-cvs.addEventListener('mousemove',function(e){ if(!drawing) return; var p=getPos(e); ctx.lineTo(p.x,p.y); ctx.strokeStyle='#1a1a2e'; ctx.lineWidth=2; ctx.lineCap='round'; ctx.stroke(); });
-cvs.addEventListener('mouseup',function(){ drawing=false; });
-cvs.addEventListener('mouseleave',function(){ drawing=false; });
-cvs.addEventListener('touchstart',function(e){ e.preventDefault(); drawing=true; var p=getPos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); document.getElementById('sig-ph').style.opacity='0'; },{passive:false});
-cvs.addEventListener('touchmove',function(e){ e.preventDefault(); if(!drawing) return; var p=getPos(e); ctx.lineTo(p.x,p.y); ctx.strokeStyle='#1a1a2e'; ctx.lineWidth=2; ctx.lineCap='round'; ctx.stroke(); },{passive:false});
-cvs.addEventListener('touchend',function(){ drawing=false; });
-function clearSig(){ ctx.clearRect(0,0,cvs.width,cvs.height); document.getElementById('sig-ph').style.opacity='1'; }
+// SIGNATURE removed — Section 6 is now "Performed by" (category / ID / name)
+function resizeCvs(){}
+function clearSig(){}
 
 // print button removed
 function validate(){
   if(!document.getElementById('field-date').value){ showToast(tr('val_date')); return false; }
   if(!document.querySelector('input[name="shift"]:checked')){ showToast(tr('val_shift')); return false; }
   if(!document.getElementById('sup-id').value.trim() || !document.getElementById('sup-name').value.trim()){ showToast(tr('val_sup')); return false; }
+  var mbc=document.getElementById('mb-category'), mbi=document.getElementById('mb-id'), mbn=document.getElementById('mb-name');
+  if(!mbc.value || !mbi.value.trim() || !mbn.value.trim()){ showToast(tr('val_madeby')); return false; }
   return true;
 }
 function doStamp(){
@@ -828,7 +897,7 @@ function resetForm(){
   document.getElementById('opt-day').classList.remove('day-active');
   document.getElementById('opt-night').classList.remove('night-active');
   preselectShift();
-  ['sup-id','sup-name','sup-bravo','field-obs'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
+  ['sup-id','sup-name','sup-bravo','field-obs','mb-category','mb-id','mb-name'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
   document.getElementById('gate-list').innerHTML=''; gateCount=0;
   document.getElementById('patrol-list').innerHTML=''; patrolCount=0;
   DEFAULT_PLATES.forEach(function(p){ addPatrol(p); });
@@ -1218,6 +1287,10 @@ function saveSnapshot(){
       '  setLblR("lbl-date","lbl_date");setLblR("lbl-shift","lbl_shift");',
       '  setLblR("lbl-supid","lbl_supId");setLblR("lbl-supname","lbl_supName");',
       '  var lb=document.getElementById("lbl-supbravo");if(lb)lb.textContent=tr("lbl_supBravo");',
+      '  setLblR("lbl-mbcat","lbl_category");setLblR("lbl-mbid","lbl_supId");setLblR("lbl-mbname","lbl_supName");',
+      '  var mbs=document.getElementById("mb-category");',
+      '  if(mbs){var cm={"":"mb_select","Document Controller":"cat_docctrl","Secretary":"cat_secretary","Supervisor":"cat_supervisor","Guard":"cat_guard"};',
+      '    Array.prototype.forEach.call(mbs.options,function(o){var k=cm[o.value];if(k)o.textContent=tr(k);});}',
       '  var od=document.getElementById("opt-day");if(od)od.textContent="\u2600 "+tr("opt_day");',
       '  var on=document.getElementById("opt-night");if(on)on.textContent="\uD83C\uDF19 "+tr("opt_night");',
       '}',
@@ -1241,6 +1314,10 @@ function saveSnapshot(){
       '  block.querySelectorAll(".p-platelbl").forEach(function(el){el.textContent=tr("lbl_plate");});',
       '  block.querySelectorAll(".p-didlbl").forEach(function(el){el.textContent=tr("lbl_driverId");});',
       '  block.querySelectorAll(".p-dnamelbl").forEach(function(el){el.textContent=tr("lbl_driverName");});',
+      '  block.querySelectorAll(".cmt-toggle-txt").forEach(function(el){el.textContent=tr("lbl_addComment");});',
+      '  block.querySelectorAll(".late-toggle-txt").forEach(function(el){el.textContent=tr("lbl_late");});',
+      '  block.querySelectorAll(".late-badge").forEach(function(el){el.textContent=tr("lbl_late");});',
+      '  block.querySelectorAll(".p-cmtlbl").forEach(function(el){el.textContent=tr("lbl_comment");});',
       '}',
       // Print read-only → PDF with same compact rules
       'function printReadOnly(){',
@@ -1319,9 +1396,17 @@ function saveSnapshot(){
       '      add(pre+"Matrícula",(document.getElementById("ppl-"+patrolNum)||{}).value||"");',
       '      add(pre+"ID Conductor",pidv);',
       '      add(pre+"Nombre Completo",(document.getElementById("pdn-"+patrolNum)||{}).value||"");',
+      '      var plcEl=document.getElementById("plc-"+patrolNum);',
+      '      var plarEl=document.getElementById("plarr-"+patrolNum);',
+      '      var pctEl=document.getElementById("pct-"+patrolNum);',
+      '      if(plcEl&&plcEl.checked){add(pre+"Llegó tarde","Sí");add(pre+"Hora de llegada",plarEl?plarEl.value:"");}',
+      '      add(pre+"Comentario",pctEl?pctEl.value:"");',
       '      addPos(pidv,sl+"P"+pn);',
       '    });',
       '    add("Observaciones",(document.getElementById("field-obs")||{}).value||"");',
+      '    add("Realizado por - Categoría",(document.getElementById("mb-category")||{}).value||"");',
+      '    add("Realizado por - ID",(document.getElementById("mb-id")||{}).value||"");',
+      '    add("Realizado por - Nombre Completo",(document.getElementById("mb-name")||{}).value||"");',
       '    var n=Math.max(pairs.length,posRows.length);',
       '    var grid=[["Campo","Información","","","ID","Puesto"]];',
       '    for(var gi2=0;gi2<n;gi2++){var lp=pairs[gi2]||["",""];var rp=posRows[gi2]||["",""];grid.push([lp[0],lp[1],"","",rp[0],rp[1]]);}',
@@ -1506,10 +1591,30 @@ var DB = (function(){
     inspectFile:inspectFile, decodeWithPassword:decodeWithPassword,
     restoreFromCache:restoreFromCache, clearCache:clearCache, cryptoOk:cryptoOk,
     lock:lock,
+    getRecords:function(){ return data.records || []; },
     isUnlocked:function(){return unlocked;}, count:function(){return data.records.length;}
   };
 })();
 function DBattach(a,b,k){ try{ DB.attachLink(a,b,k); }catch(e){} }
+
+// Category matcher for "Performed by" (section 6). Filters DB records by role.
+function categoryMatch(role, cat){
+  var r = String(role==null?'':role).trim().toLowerCase();
+  if(!cat) return false;
+  switch(cat){
+    case 'Supervisor':          return r.indexOf('super')>=0 || r.indexOf('مشرف')>=0;
+    case 'Guard':               return r.indexOf('guard')>=0 || r.indexOf('حارس')>=0;
+    case 'Document Controller': return r.indexOf('document')>=0 || r.indexOf('controler')>=0 || r.indexOf('controller')>=0 || r.indexOf('وثائق')>=0 || r.indexOf('مراقب')>=0;
+    case 'Secretary':           return r.indexOf('secret')>=0 || r.indexOf('سكرتير')>=0 || r.indexOf('أمين')>=0;
+    default:                    return false;
+  }
+}
+function mbCategoryRoster(){
+  var cat = (document.getElementById('mb-category')||{}).value || '';
+  if(!cat) return [];
+  var recs = []; try{ recs = DB.getRecords()||[]; }catch(e){ recs = []; }
+  return recs.filter(function(r){ return categoryMatch(r.role, cat); });
+}
 
 // ── MUTUAL EXCLUSION: names + Bravo selects (one person / one slot) ──────────
 var DBExc = (function(){
@@ -1523,7 +1628,7 @@ var DBExc = (function(){
   }
   function getRoster(kind){ try{ return DB.getRoster(kind)||[]; }catch(e){ return []; } }
   function refreshNames(){
-    var fields=[].slice.call(document.querySelectorAll('.db-name'));
+    var fields=[].slice.call(document.querySelectorAll('.db-name')).filter(function(f){ return f.getAttribute('data-dbkind')!=='madeby'; });
     var taken={};
     fields.forEach(function(f){ var v=norm(f.value); if(v) taken[v]=(taken[v]||0)+1; });
     fields.forEach(function(f){
@@ -1542,7 +1647,7 @@ var DBExc = (function(){
     });
   }
   function refreshIds(){
-    var fields=[].slice.call(document.querySelectorAll('.db-id'));
+    var fields=[].slice.call(document.querySelectorAll('.db-id')).filter(function(f){ return f.getAttribute('data-dbkind')!=='madeby'; });
     var taken={};
     fields.forEach(function(f){ var v=String(f.value||'').trim(); if(v) taken[v]=(taken[v]||0)+1; });
     fields.forEach(function(f){
@@ -1611,7 +1716,7 @@ var DBPick = (function(){
   var panel=null, cur=null;
   function norm(s){ return String(s==null?'':s).trim().toLowerCase(); }
   function unlocked(){ try{ return DB.isUnlocked(); }catch(e){ return false; } }
-  function getRoster(kind){ try{ return DB.getRoster(kind)||[]; }catch(e){ return []; } }
+  function getRoster(kind){ try{ if(kind==='madeby') return mbCategoryRoster(); return DB.getRoster(kind)||[]; }catch(e){ return []; } }
 
   function ensurePanel(){
     if(panel) return panel;
@@ -1646,8 +1751,8 @@ var DBPick = (function(){
     var p=ensurePanel(); p.innerHTML='';
     if(!unlocked()){ hide(); return; }
     var roster=getRoster(cur.kind), qq=norm(q);
-    var tIds=takenSet('.db-id', cur.idEl, function(f){ return String(f.value||'').trim(); });
-    var tNames=takenSet('.db-name', cur.nameEl, function(f){ return norm(f.value); });
+    var tIds = (cur.kind==='madeby') ? {} : takenSet('.db-id', cur.idEl, function(f){ return String(f.value||'').trim(); });
+    var tNames = (cur.kind==='madeby') ? {} : takenSet('.db-name', cur.nameEl, function(f){ return norm(f.value); });
     var shown=0;
     for(var i=0;i<roster.length && shown<60;i++){
       var r=roster[i];
@@ -1868,6 +1973,12 @@ resizeCvs();
 DBExc.initBravo(document.getElementById('sup-bravo'));
 DBattach(document.getElementById('sup-id'), document.getElementById('sup-name'), 'sup');
 DBPick.register(document.getElementById('sup-id'), document.getElementById('sup-name'), 'sup');
+// Performed-by (section 6): category-filtered picker
+DBPick.register(document.getElementById('mb-id'), document.getElementById('mb-name'), 'madeby');
+document.getElementById('mb-category').addEventListener('change', function(){
+  document.getElementById('mb-id').value = '';
+  document.getElementById('mb-name').value = '';
+});
 document.getElementById('db-lock-btn').addEventListener('click', dbOpen);
 DB.restoreFromCache();   // remembered DB on this device (same file) — no password needed
 DB.populateDatalists();
